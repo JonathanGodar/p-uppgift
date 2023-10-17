@@ -53,56 +53,68 @@ class RemoveNoteResult(Enum):
 
 class Calendar:
 	def __init__(self):
-		self.notes = []
+		self.__notes = []
 
 	def add_note(self, note: Note) -> AddNoteResult:
-		insert_position = self.find_note_by_date(note.start_date)
+		self.find_note_by_date(note.start_date)
 		if insert_position > 0:
 			return AddNoteResult.DateOverlap
 		
-		self.notes.insert(insert_position, note)
+		self.__notes.insert(insert_position, note)
 		return AddNoteResult.Ok
 	
 	def constrain_int_to_notes_idx_bounds(self, idx: int) -> int:
 		return min(max(idx, 0), self.get_note_count() - 1)
 	
 	def get_previews(self, max_char_count_per_note: int):
-		previews = list(map(lambda note: note.get_preview(max_char_count_per_note), self.notes))
+		previews = list(map(lambda note: note.get_preview(max_char_count_per_note), self.__notes))
 		return previews
 	
 	def get_note_count(self):
-		return len(self.notes)
+		return len(self.__notes)
 	
 	# None if idx is out of bounds 
 	def get_note_by_idx(self, index: int):
-		if index < 0 or index >= len(self.notes):
+		if index < 0 or index >= len(self.__notes):
 			return None
 
-		return self.notes[index]
+		return self.__notes[index]
 	
 
 	def delete_note_by_date(self, date: dt.date) -> RemoveNoteResult:
-		idx = self.find_note_by_date(date)
-		if idx < 0:
+		try:
+				idx = self.find_note_by_date(date)
+				return self.delete_note_by_idx(idx)
+		except:
 			return RemoveNoteResult.NoteNotFound
-		return self.delete_note_by_idx(idx)
 
 	def delete_note_by_idx(self, index: int) -> RemoveNoteResult:
-		if index < 0 or index >= len(self.notes):
+		if index < 0 or index >= len(self.__notes):
 			return RemoveNoteResult.NoteNotFound
 
 		return RemoveNoteResult.Ok
 		
+	
+	def date_overlap(self, date_to_search):
+		try:
+			self.find_note_by_date(date_to_search)
+			return True
+		except:
+			return False
+
 	# Returns the index of the note if found, returns the compliment of the last searched index otherwise(a negative number)
 	def find_note_by_date(self, date_to_search: dt.date):
-		if len(self.notes) == 0:
-			return ~0
+		note_dates_only = list(map(lambda note: note.start_date, self.__notes))
 
-		note_dates_only = list(map(lambda note: note.start_date, self.notes))
+		# https://docs.python.org/3/library/bisect.html
 		index = bisect_left(note_dates_only, date_to_search) 
-		if note_dates_only[index] == date_to_search:
-			return index
-		return ~index
+
+		if index == len(note_dates_only) or note_dates_only[index] != date_to_search:
+			raise ValueError
+
+		return index
+	
+
 	
 class DirectoryCalendarSaver:
 	@staticmethod
@@ -128,7 +140,7 @@ class SingleFileCalendarSaver:
 	@staticmethod
 	def __serialize_calendar(calendar: Calendar): 
 		# We escape the $ symbol with as $$ such that the program can deserialize the file unambiguesly
-		notes_escaped = map(lambda note: note.serialize().replace('$', '$$'), calendar.notes)
+		notes_escaped = map(lambda note: note.serialize().replace('$', '$$'), calendar.__notes)
 		notes_formatted = map(lambda escaped: '$' + escaped, notes_escaped)
 		
 		return '\n'.join(notes_formatted)

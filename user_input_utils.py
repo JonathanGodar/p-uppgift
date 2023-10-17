@@ -17,6 +17,11 @@ def get_from_user_with_transformations(prompt: str, transformations):
 		
 	return user_input
 
+def is_alternatie_transformation(input, alternativ):
+	if input in alternativ:
+		return input
+
+	raise Exception("Hej")
 
 def get_int_from_user(prompt: str, transformations=[]):
 	return get_from_user_with_transformations(prompt, [to_int_transformation] + transformations) 
