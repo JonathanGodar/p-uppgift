@@ -12,6 +12,10 @@ This is a program which allow you to take simple textnotes. Each note is assigne
 * Note creation in cli
 * Note deletion - In page-mode you have the ability to delete the current note
 
+
+## Requirements
+* 
+
 ## Running
 ```bash
 python main.py

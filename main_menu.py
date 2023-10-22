@@ -34,4 +34,4 @@ def add_note_to_calendar(calendar: Calendar):
 		date = get_date_from_user("Vilket datum ska minnesantäckningen ha?") 
 		note_text = input("Skriv din minnesanteckning: ")
 		note = Note(date, note_text) # type: ignore
-		calendar.add_note(note)
+		calendar.try_add_note(note)

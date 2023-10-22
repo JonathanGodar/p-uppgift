@@ -12,23 +12,18 @@ class NoteCreationException(Exception):
 		self.type = variant
 	
 class Note():
-	def __init__(self, date: dt.date,  note_text: str):
-		if not isinstance(date, dt.date) or not isinstance(note_text, str):
-			raise NoteCreationException(NoteCreationExceptionVariant.bad_data_type_input)
-
+	def __init__(self, start_datetime: dt.datetime, end_datetime: dt.datetime,  note_text: str):
 		note_text = note_text.strip()
 
-		if note_text == "":
-			raise NoteCreationException(NoteCreationExceptionVariant.empty_note_text)
-
-		self.start_date = date
+		self.start_datetime = start_datetime 
+		self.end_datetime = end_datetime 
 		self.text = note_text
-	
+		
 	def __str__(self):
-		return f'{self.start_date.strftime("%Y-%m-%d")}: {self.text}'
+		return f'{self.start_datetime.strftime("%Y-%m-%d %H:%M")}-{self.end_datetime.strftime("%H:%M")}: {self.text}'
 	
 	def get_preview(self, max_char_count: int, elipson = "..."):
-		preview = f'{str(self.start_date)}: '
+		preview = f'{str(self.start_datetime)}: '
 		if len(preview) > max_char_count:
 			return preview[:max_char_count-1]
 		
@@ -46,6 +41,6 @@ class Note():
 			preview += elipson
 		return preview
 
-	
 	def serialize(self):
+		raise Exception("TODO")
 		return f'{str(self.start_date)}: {self.text}'
