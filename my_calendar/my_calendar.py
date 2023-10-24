@@ -37,7 +37,6 @@ class Calendar:
 
 	def try_add_note(self, note: Note) -> AddNoteResult:
 		if self.get_overlapping_notes(note) != []:
-			print("DATE OVERLAP!")
 			return AddNoteResult.DateOverlap
 		
 		insort(self.notes, note, key=lambda note: note.start_datetime)
@@ -63,7 +62,6 @@ class Calendar:
 		return self.get_notes_in_interval(search_start, search_end)
 	
 	def get_notes_for_date(self, date: dt.date):
-		print(f'Notes in cal: {self.notes}')
 		extract_note_date_fn = lambda note: note.start_datetime.date()
 		begin_index = bisect_left(self.notes, date, key=extract_note_date_fn)
 		end_index = bisect_left(self.notes, date + dt.timedelta(days=1), key= extract_note_date_fn)
@@ -114,13 +112,10 @@ class Calendar:
 
 
 	def get_first_note_before(self, before: dt.datetime) -> Note:
-		print(f'Call for first note before: {before}')
 		note_idx = bisect_right(self.notes, before, key=lambda note: note.end_datetime) - 1
 		if note_idx < 0:
 			return None
 
-		print(f'Returing: {str(self.notes[note_idx])}')
-		
 		return self.notes[note_idx]
 
 	# Returns the index of the note if it is found, other wise it returns the compliment of the last searched position (always negative)

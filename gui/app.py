@@ -1,6 +1,6 @@
 from enum import Enum
 import tkinter as tk
-from gui.browse_page import BrowsePage
+from gui.browse_page.browse_page import BrowsePage
 from gui.load_calendar_page import LoadCalendarPage
 from gui.multipage_frame import MultipageFrame
 from my_calendar.my_calendar import Calendar

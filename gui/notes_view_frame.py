@@ -5,7 +5,7 @@ from typing import List
 
 from my_calendar.note import Note
 
-class FilofaxPageView(tk.Frame):
+class NotesViewFrame(tk.Frame):
 	def __init__(self, root: tk.Frame, notes: List[Note] =[]):
 		super().__init__(root)
 		self.content = tk.Listbox(self)

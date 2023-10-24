@@ -10,10 +10,6 @@ import datetime as dt
 
 from time_utils import strip_seconds
 
-class AddNotePages(Enum):
-	MAIN_PAGE=0
-	# SELECT_TIME_PAGE=1
-
 class AddNotePage(MultipageFrame):
 	def __init__(self, root: tk.Frame, callback, preset: Note|None = None):
 		super().__init__(root)
@@ -135,8 +131,6 @@ class SelectDateTimeFrame(tk.Frame):
 			messagebox.showerror("Inget datum valt", "Du måste välja ett datum i kalendern för att kunna gå vidare")
 			return
 		
-		print("Returing now!")
-
 		# https://stackoverflow.com/questions/1937622/convert-date-to-datetime-in-python
 		date_time = dt.datetime(year=selected_date.year, month=selected_date.month, day=selected_date.day, hour=time_parsed[0], minute=time_parsed[1])
 		self.callback(date_time)

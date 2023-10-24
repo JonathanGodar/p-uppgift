@@ -23,8 +23,9 @@ class Note():
 		self.text = note_text
 		
 	def __str__(self):
-		return f'{self.start_datetime.strftime("%Y-%m-%d %H:%M")}-{self.end_datetime.strftime("%H:%M")}: {self.text}'
-		# return f'{self.start_datetime.strftime("%Y-%m-%d %H:%M")}-{self.end_datetime.strftime("%H:%M")}: {self.text}'
+		TIME_FORMAT = "%Y-%m-%d %H:%M"
+		end_datetime_format = "%H:%M" if self.end_datetime - self.start_datetime < dt.timedelta(days=1) else TIME_FORMAT 
+		return f'{self.start_datetime.strftime(TIME_FORMAT)}-{self.end_datetime.strftime(end_datetime_format)}: {self.text}'
 	
 	def get_preview(self, max_char_count: int, ellipsis = "..."):
 		preview = f'{self.start_datetime.strftime("%y-%m-%d %H:%M")}: '

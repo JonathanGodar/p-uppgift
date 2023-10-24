@@ -50,13 +50,13 @@ class LoadCalendarPage(tk.Frame):
 	def load_calendar_from_directory(self):
 		directory = filedialog.askdirectory()
 
-		try:
-			(calendar, included_files) = DirectoryCalendarSaver.load(directory)
+		# try:
+		calendar = DirectoryCalendarSaver.load(directory)
 
-			save_function = LoadCalendarPage.create_save_method_for_directory_calendar(calendar, included_files, directory)
-			self.callback(calendar, save_function)
-		except Exception as e:
-			messagebox.showerror("Kunde inte ladda mappen", str(e))
+		save_function = LoadCalendarPage.create_save_method_for_directory_calendar(calendar, directory)
+		self.callback(calendar, save_function)
+		# except Exception as e:
+		# 	messagebox.showerror("Kunde inte ladda mappen", str(e))
 
 		
 
@@ -75,14 +75,7 @@ class LoadCalendarPage(tk.Frame):
 		return  calendar_saver
 
 	@staticmethod
-	def create_save_method_for_directory_calendar(calendar, includec_files, directory_path, ):
+	def create_save_method_for_directory_calendar(calendar, directory_path, ):
 		def calendar_saver():
-			# Clear any old saves so that removed entries are not accidentally still saved 
-			try:
-				for file in includec_files:
-					os.remove(file)
-			except:
-				pass
-			
 			DirectoryCalendarSaver.save(calendar, directory_path)
 		return calendar_saver
