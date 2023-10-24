@@ -6,6 +6,7 @@ from typing import List
 from my_calendar.note import Note
 
 class NotesViewFrame(tk.Frame):
+	""" A fram which can show a list of Notes """
 	def __init__(self, root: tk.Frame, notes: List[Note] =[]):
 		super().__init__(root)
 		self.content = tk.Listbox(self)
@@ -13,10 +14,8 @@ class NotesViewFrame(tk.Frame):
 
 		self.set_notes(notes)
 	
-
 	def get_notes(self) -> [Note]:
 		return self.notes
-	
 	
 	def set_notes(self, notes: List[Note]):
 		notes.sort(key=lambda note: note.start_datetime)

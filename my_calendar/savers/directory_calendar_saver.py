@@ -1,12 +1,14 @@
 import os
 from my_calendar.my_calendar import Calendar
 from my_calendar.note import Note
-from my_calendar.single_file_calendar_saver import SingleFileCalendarSaver
+from my_calendar.savers.single_file_calendar_saver import SingleFileCalendarSaver
 import glob
 import os.path as os_path
 import datetime as dt
 
 class DirectoryCalendarSaver:
+	""" Saves a Calendar in a directory. Notes that begin on the same day get saved in the same file """
+
 	@staticmethod
 	def load(path: str) -> Calendar:
 		files = glob.glob(f'*.{DirectoryCalendarSaver.NOTE_FILE_EXTENSION}', root_dir=path) 
@@ -34,11 +36,6 @@ class DirectoryCalendarSaver:
 			save_path = os_path.join(path, DirectoryCalendarSaver.get_filename_for_date(note.start_datetime))
 			SingleFileCalendarSaver.save_notes(note_for_this_date, save_path)
 			note = calendar.get_first_note_after(note_for_this_date[-1].start_datetime)
-
-		# for note in calendar:
-		# 	with open(path+DirectoryCalendarSaver.get_filename_for_note(note), 'w', encoding='utf-8') as file:
-		# 		file.write(note.save())
-				
 	
 
 	NOTE_FILE_NAME_FORMAT = "%Y_%m_%d"

@@ -16,7 +16,7 @@ class SingleFileCalendarSaver:
 
 	@staticmethod
 	def save(calendar: Calendar, path: str): 
-		SingleFileCalendarSaver.save(calendar.get_all_notes())
+		SingleFileCalendarSaver.save_notes(calendar.get_all_notes(), path)
 	
 	@staticmethod
 	def save_notes(notes: [Note], path: str):

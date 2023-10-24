@@ -47,6 +47,7 @@ class Calendar:
 		return self.notes
 	
 	def get_notes_in_interval(self, interval_start: dt.datetime, interval_end: dt.datetime):
+		""" Retrieves all notes that are active in a given interaval """
 		left_bound = bisect_right(self.notes, interval_start, key=lambda note: note.end_datetime)
 		right_bound = bisect_left(self.notes, interval_end, key=lambda note: note.start_datetime)
 
@@ -56,12 +57,14 @@ class Calendar:
 		return self.notes[left_bound:right_bound]
 	
 	def get_notes_for_month(self, date: dt.datetime):
+		""" Returns all notes that start in the given month """
 		search_start = strip_days(date)
 		search_end = search_start + relativedelta(months=1)
 		
 		return self.get_notes_in_interval(search_start, search_end)
 	
 	def get_notes_for_date(self, date: dt.date):
+		""" Returns all notes that start on the given date """
 		extract_note_date_fn = lambda note: note.start_datetime.date()
 		begin_index = bisect_left(self.notes, date, key=extract_note_date_fn)
 		end_index = bisect_left(self.notes, date + dt.timedelta(days=1), key= extract_note_date_fn)
@@ -69,6 +72,7 @@ class Calendar:
 		return self.notes[begin_index:end_index]
 	
 	def constrain_int_to_notes_idx_bounds(self, idx: int) -> int:
+		""" Takes an int and clamps it between 0 and len(self.notes) """
 		return min(max(idx, 0), self.get_note_count() - 1)
 	
 	def get_previews(self, max_char_count_per_note: int):
@@ -85,7 +89,7 @@ class Calendar:
 
 		return self.notes[index]
 
-	def delete_note_by_datetime(self, date: dt.datetime) -> RemoveNoteResult:
+	def delete_note_by_start_datetime(self, date: dt.datetime) -> RemoveNoteResult:
 		idx = self.find_note_by_start_datetime(date)
 		if idx < 0:
 			return RemoveNoteResult.NoteNotFound
@@ -109,7 +113,6 @@ class Calendar:
 				return note 
 		
 		return None
-
 
 	def get_first_note_before(self, before: dt.datetime) -> Note:
 		note_idx = bisect_right(self.notes, before, key=lambda note: note.end_datetime) - 1

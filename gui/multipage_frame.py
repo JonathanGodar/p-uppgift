@@ -1,6 +1,8 @@
 import tkinter as tk
 
 class MultipageFrame(tk.Frame):
+	""" Inherit from this class to get access to methods that lets you change pages in a frame easily """
+
 	def __init__(self, root, *args, **kwargs):
 		super().__init__(root, *args, **kwargs)
 

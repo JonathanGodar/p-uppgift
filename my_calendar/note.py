@@ -24,6 +24,8 @@ class Note():
 		
 	def __str__(self):
 		TIME_FORMAT = "%Y-%m-%d %H:%M"
+		
+		# If the note spans more than a day we have to be more specifik about when the note ends
 		end_datetime_format = "%H:%M" if self.end_datetime - self.start_datetime < dt.timedelta(days=1) else TIME_FORMAT 
 		return f'{self.start_datetime.strftime(TIME_FORMAT)}-{self.end_datetime.strftime(end_datetime_format)}: {self.text}'
 	

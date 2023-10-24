@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Tuple
 import tkinter as tk
 from tkinter import messagebox
+from gui.date_time_selection_page import SelectDateTimeFrame
 from my_calendar.my_calendar import Calendar
 from my_calendar.note import Note
 import tkcalendar as tkcal
@@ -11,6 +12,8 @@ import datetime as dt
 from time_utils import strip_seconds
 
 class AddNotePage(MultipageFrame):
+	""" A Page where the user can create notes. The result (Note|None) is passed as an argument to the callback function """
+
 	def __init__(self, root: tk.Frame, callback, preset: Note|None = None):
 		super().__init__(root)
 		self.callback = callback
@@ -52,6 +55,7 @@ class AddNotePage(MultipageFrame):
 		self.update_datetime_labels()
 
 		done_button = tk.Button(self.main_page, command=self.done, text="Spara")
+		cancel_button = tk.Button(self.main_page, command=self.cancel, text="Radera och Avbryt")
 
 		self.start_datetime_label.pack(side=tk.LEFT)
 		change_start_datetime_button.pack(side=tk.LEFT)
@@ -62,14 +66,24 @@ class AddNotePage(MultipageFrame):
 		start_datetime_frame.pack()
 		end_datetime_frame.pack()
 		note_text_entry.pack(fill=tk.BOTH, padx=50)
+
 		done_button.pack()
+		cancel_button.pack()
+
+	def cancel(self):
+		self.callback(None)
 	
 	def done(self):
+		if self.note_text.get() == "":
+			messagebox.WARNING("Felaktig inmatning", "Du måste skriva något i anteckningarna")
+			return
+
 		note = Note(self.start_datetime, self.end_datetime, self.note_text.get())
 		self.callback(note)
 	
 
 	def switch_to_date_time_selection(self, callback):
+		""" Will show the user a page where they can select a date and a time """
 		self.switch_to_page(SelectDateTimeFrame(self,callback))
 		
 	def on_user_input_start_time(self, new_time):
@@ -97,54 +111,3 @@ class AddNotePage(MultipageFrame):
 
 		end_text = f'Slut tid: {self.end_datetime.strftime(DATE_FORMAT)}'
 		self.end_datetime_label.config(text=end_text)
-
-class SelectDateTimeFrame(tk.Frame):
-	def __init__(self, root: tk.Frame, callback, preset: dt.datetime = dt.datetime.now()):
-		super().__init__(root)
-		self.callback = callback
-
-		preset = strip_seconds(preset)
-		self.calendar = tkcal.Calendar(self)
-		self.calendar.selection_set(preset.date())
-
-		self.time_str = tk.StringVar() 
-		time_label = tk.Label(self, text='Tid(HH:MM):)')
-		time_entry = tk.Entry(self, textvariable=self.time_str)
-		self.time_str.set(preset.strftime('%H:%M'))
-
-		done_button = tk.Button(self, text='Klar', command=self.done)
-
-		self.calendar.pack()
-		time_label.pack(side=tk.LEFT)
-		time_entry.pack(side=tk.LEFT)
-		done_button.pack()
-	
-	def done(self):
-		time_parsed = self.try_parse_time_entry()
-
-		if time_parsed == None:
-			messagebox.showerror("Felaktig inmatning", "Tiden i tid rutan måste vara i formatet 00:00, (TIMME:MINUT)")
-			return
-		
-		selected_date = self.calendar.selection_get()
-		if selected_date == None:
-			messagebox.showerror("Inget datum valt", "Du måste välja ett datum i kalendern för att kunna gå vidare")
-			return
-		
-		# https://stackoverflow.com/questions/1937622/convert-date-to-datetime-in-python
-		date_time = dt.datetime(year=selected_date.year, month=selected_date.month, day=selected_date.day, hour=time_parsed[0], minute=time_parsed[1])
-		self.callback(date_time)
-	
-	def try_parse_time_entry(self) -> None | Tuple[int, int]:
-		try: 
-			[hour_str, minute_str]= self.time_str.get().split(":")
-			hour = int(hour_str)
-			min = int(minute_str)
-
-			if hour < 0 or hour > 23 or min < 0 or min > 59:
-				return None			
-
-			return (hour, min)
-		except:
-			pass
-	# def display_invalid_time_input_messagebox(self):
