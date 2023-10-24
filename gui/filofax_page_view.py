@@ -3,24 +3,23 @@ from tkinter import messagebox
 import datetime as dt
 from typing import List
 
-from note import Note
+from my_calendar.note import Note
 
 class FilofaxPageView(tk.Frame):
 	def __init__(self, root: tk.Frame, notes: List[Note] =[]):
 		super().__init__(root)
-		# https://www.geeksforgeeks.org/scrollable-frames-in-tkinter/
-		# self.scroll_bar = tk.Scrollbar(self, orient=tk.VERTICAL)
-		# self.scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
-
 		self.content = tk.Listbox(self)
 		self.content.pack(fill=tk.BOTH, expand=True)
 
 		self.set_notes(notes)
 	
+
+	def get_notes(self) -> [Note]:
+		return self.notes
 	
 	
 	def set_notes(self, notes: List[Note]):
-		# notes.sort(key=lambda note: note.start_datetime)
+		notes.sort(key=lambda note: note.start_datetime)
 		self.notes = notes
 		self.update_content_view()
 

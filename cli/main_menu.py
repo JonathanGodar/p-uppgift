@@ -1,13 +1,13 @@
-from my_calendar import Calendar
+from my_calendar.my_calendar import Calendar
 from user_input_utils import get_alternative_from_user, get_date_from_user
-from calendar_page_view import calendar_page_view
-from note import Note
-from save_menu import save_menu
+from cli.calendar_page_view import calendar_page_view
+from my_calendar.note import Note
+from cli.save_menu import save_menu
 import os
 
 
 def print_main_menu_help():
-	print("1 - Lägg till en minnesantäckning")
+	print("1 - Lägg till en minnesanteckning")
 	print("2 - Bläddra igenom minnesantäcknignar")
 	print("3 - Skriv ut en översikt över kalendern")
 	print("4 - Avsluta (och spara)")

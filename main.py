@@ -1,18 +1,18 @@
-from note import Note
+from my_calendar.note import Note
 import datetime as dt
-from my_calendar import Calendar, SingleFileCalendarSaver, DirectoryCalendarSaver
 from user_input_utils import get_alternative_from_user, get_date_from_user
-from main_menu import main_menu
+from cli.main_menu import main_menu
 import tkinter as tk
 from tkinter import ttk
-from app import App
+from gui.app import App
 import os
 
 if __name__ == '__main__':
-	app = App()
-	app.minsize(1080, 720)
-
-	app.mainloop()
+	window = tk.Tk()
+	window.minsize(1080, 720)
+	app = App(window, window.destroy)
+	app.pack(fill=tk.BOTH)
+	window.mainloop()
 	
 
 

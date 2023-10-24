@@ -1,4 +1,4 @@
-from my_calendar  import Calendar, DirectoryCalendarSaver, SingleFileCalendarSaver
+from my_calendar.my_calendar  import Calendar 
 from user_input_utils import get_alternative_from_user
 
 
@@ -15,11 +15,11 @@ def save_menu(calendar: Calendar):
 	if user_choice == 1:
 		# TODO Use get_from_user_with_transformations
 		file_path = input("Skriv in din fil: ")
-		SingleFileCalendarSaver.save(calendar, file_path)
+		# SingleFileCalendarSaver.save(calendar, file_path)
 	elif user_choice == 2:
 		# TODO Use get_from_user_with_transformations
 		file_path = input("Skriv in din fil: ")
-		DirectoryCalendarSaver.save(calendar, file_path)
+		# DirectoryCalendarSaver.save(calendar, file_path)
 	elif user_choice == 3:
 		user_choice = get_alternative_from_user("Är du säker på att du inte vill spara? [j/n]", ["j","n"])
 		if user_choice != "n":
