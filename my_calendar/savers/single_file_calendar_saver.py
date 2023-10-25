@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from my_calendar.my_calendar import Calendar
 from my_calendar.note import Note
 

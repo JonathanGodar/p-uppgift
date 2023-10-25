@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 import tkinter as tk
 class CalendarActionMenu(tk.Frame):
 	""" A menu with buttons for editing a calendar, eg. creating new notes or deleting them """

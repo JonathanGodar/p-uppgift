@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from enum import Enum
 import tkinter as tk
 from gui.browse_page.browse_page import BrowsePage

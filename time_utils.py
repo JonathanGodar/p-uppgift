@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 import datetime as dt
 
 def date_to_year_month_tuple(date: dt.date):

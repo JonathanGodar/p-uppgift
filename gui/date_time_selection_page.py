@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from typing import Tuple
 import tkinter as tk
 import datetime as dt

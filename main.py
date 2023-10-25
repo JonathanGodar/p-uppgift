@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from my_calendar.note import Note
 import datetime as dt
 import tkinter as tk

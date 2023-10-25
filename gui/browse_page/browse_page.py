@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
@@ -43,7 +45,10 @@ class BrowsePage(MultipageFrame):
 		self.switch_to_page(self.main_page)
 
 	def create_main_page(self):
-		""" This function creates the page where the main navigation, notes_view and edit options are """
+		""" This function creates the page where the main navigation, notes_view and edit options are
+		Adds: main_page, cursor_date, browse_menu, notes_view, view_width_menu, notes_view to self.
+		
+		"""
 		self.main_page = tk.Frame(self)
 		
 		# Decides the date is currently beeing viewed

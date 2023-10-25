@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from enum import Enum
 import datetime as dt
 from my_calendar.note import Note

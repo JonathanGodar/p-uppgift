@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 from enum import Enum
 from typing import Tuple
 import tkinter as tk
@@ -42,6 +44,16 @@ class AddNotePage(MultipageFrame):
 		----------
 		preset : Note
 			The preset of the frame. See self.__init__()
+		
+		Additions to self
+		-----------------
+			main_page: tkinter.Frame
+			start_datetime_label: tkinter.Label
+			start_datetime: datetime.datetime
+			end_datetime_label: tkinter.Label
+			end_datetime: datetime.datetime
+			note_text_entry: tkinkinter.Entry
+			note_text: tkinter.StringVar
 		"""
 		self.main_page = tk.Frame(self)
 

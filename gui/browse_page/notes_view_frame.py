@@ -1,3 +1,5 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
+
 import tkinter as tk
 from tkinter import messagebox
 import datetime as dt

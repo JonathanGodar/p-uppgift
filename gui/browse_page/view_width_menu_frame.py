@@ -1,3 +1,4 @@
+# Niklasson Godar, Jonathan | jonathan.godar@ug.kth.se
 import tkinter as tk
 
 from gui.browse_page.notes_view_width import NotesViewWidth
