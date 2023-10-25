@@ -12,9 +12,20 @@ import datetime as dt
 from time_utils import strip_seconds
 
 class AddNotePage(MultipageFrame):
-	""" A Page where the user can create notes. The result (Note|None) is passed as an argument to the callback function """
+	""" A Page where the user can create notes. NOTE: The note will have start time and end time be at the start of a minute (see date_time_selection_page). The result (Note|None) is passed as an argument to the callback function """
 
 	def __init__(self, root: tk.Frame, callback, preset: Note|None = None):
+		""" Performs setup of UI
+		Parameters
+		----------
+		root : tkinter.Frame
+			The frame to which this frame shall bind
+		callback : function(Note|None) -> None
+			The function that will be called once the user has selected a note. The argument will be of type None if the user choose to cancel
+		preset : Note|None
+			Will be the start values when this frame is opened.
+			If None then preset will be Note(datetime.now(), datetime.now() + timedelata(hours=1), "")
+		"""
 		super().__init__(root)
 		self.callback = callback
 
@@ -26,6 +37,12 @@ class AddNotePage(MultipageFrame):
 		self.switch_to_page(self.main_page)
 
 	def create_main_page(self, preset: Note):
+		""" Creates the main note creation page (Where the user can choose to edit star/end time and input the text that the note should contain)
+		Parameters
+		----------
+		preset : Note
+			The preset of the frame. See self.__init__()
+		"""
 		self.main_page = tk.Frame(self)
 
 		self.start_datetime = preset.start_datetime
@@ -37,9 +54,11 @@ class AddNotePage(MultipageFrame):
 		self.start_datetime_label = tk.Label(start_datetime_frame)
 		self.end_datetime_label = tk.Label(end_datetime_frame)
 
+		#																																		"Change"
 		change_start_datetime_button = tk.Button(start_datetime_frame, text="Ändra", 
 																					 command=lambda: self.switch_to_page(SelectDateTimeFrame(self, self.on_user_input_start_time, self.start_datetime)))
 
+		#																																"Change"
 		change_end_datetime_button = tk.Button(end_datetime_frame, text="Ändra", 
 																				 command=lambda: self.switch_to_page(SelectDateTimeFrame(self, self.on_user_input_end_time, self.end_datetime)))
 
@@ -54,7 +73,10 @@ class AddNotePage(MultipageFrame):
 		self.note_text.set(preset.text)
 		self.update_datetime_labels()
 
+		#																																"Save"
 		done_button = tk.Button(self.main_page, command=self.done, text="Spara")
+
+		#																																		"Delete and cancel"
 		cancel_button = tk.Button(self.main_page, command=self.cancel, text="Radera och Avbryt")
 
 		self.start_datetime_label.pack(side=tk.LEFT)
@@ -71,10 +93,13 @@ class AddNotePage(MultipageFrame):
 		cancel_button.pack()
 
 	def cancel(self):
+		""" Cancels the creation of a note. Called when the user presses __init__.cancel_button"""
 		self.callback(None)
 	
 	def done(self):
+		""" Performas validation of the user inputed note and calls callback with the created not if validations pass """
 		if self.note_text.get() == "":
+			#										"Bad input",					"You have to write something in your note"
 			messagebox.WARNING("Felaktig inmatning", "Du måste skriva något i anteckningarna")
 			return
 
@@ -83,31 +108,51 @@ class AddNotePage(MultipageFrame):
 	
 
 	def switch_to_date_time_selection(self, callback):
-		""" Will show the user a page where they can select a date and a time """
+		""" Will show the user a page where they can select a date and a time
+		Parameters
+		----------
+		callback : function(datetime) -> None
+			Will be called once the user has selected a note
+		"""
 		self.switch_to_page(SelectDateTimeFrame(self,callback))
 		
-	def on_user_input_start_time(self, new_time):
+	def on_user_input_start_time(self, new_time: dt.datetime):
+		""" Changes the page back to self.main page and sets the self.start_datetime to the new time. Performs some validatoins
+		Parameters:
+		new_time : datetime.datetime
+			The new start_datetime which should be set
+		"""
 		self.switch_to_page(self.main_page)
 		self.start_datetime = new_time
 
+		# Move the end_time forward if it is before the start_time
 		if self.end_datetime < self.start_datetime:
 			self.end_datetime = self.start_datetime + dt.timedelta(hours=1)
 
 		self.update_datetime_labels()
 
-	def on_user_input_end_time(self, new_time):
+	def on_user_input_end_time(self, new_time: dt.datetime):
+		""" Changes the page back to self.main page and sets the self.end_datetime to the new time. Performs some validatoins
+		Parameters:
+		new_time : datetime.datetime
+			The new end_datetime which should be set
+		"""
 		self.switch_to_page(self.main_page)
 		self.end_datetime = new_time
 
+		# Move the start_time backwards if it is after the end_time
 		if self.start_datetime > self.end_datetime:
 			self.start_datetime = self.end_datetime - dt.timedelta(hours=1)
 
 		self.update_datetime_labels()
 	
 	def update_datetime_labels(self):
+		""" Updates the labels which shows the user which start_datetime and end_datetime are selected"""
 		DATE_FORMAT = "%d/%m-%Y %H:%M"
+		# 							"Start time:"
 		start_text = f'Start tid: {self.start_datetime.strftime(DATE_FORMAT)}'
 		self.start_datetime_label.config(text=start_text)
 
+		# 					"End time:"
 		end_text = f'Slut tid: {self.end_datetime.strftime(DATE_FORMAT)}'
 		self.end_datetime_label.config(text=end_text)
